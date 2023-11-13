@@ -41,6 +41,10 @@ public class Employee implements Comparable<Employee>{
 
     public int getRokUrodzenia() {return this.rokUrodzenia;}
 
+    @Override
+    public String toString() {
+        return "{name='" + imie + "', lastName='" + nazwisko + "', condition='" + condition + "', salary=" + wynagrodzenie + "}";
+    }
 
 
     void printing() {
@@ -54,9 +58,12 @@ public class Employee implements Comparable<Employee>{
 
     @Override
     public int compareTo(Employee o) {
+        int lastNameComparison = this.nazwisko.compareTo(o.nazwisko);
+        if (lastNameComparison != 0) {
+            return lastNameComparison;
+        }
 
-        int isEqual1 = this.nazwisko.compareTo(o.nazwisko);
-        int isEqual2 = this.imie.compareTo(o.imie);
-        return isEqual1 & isEqual2;
+        // If last names are the same, compare by first names
+        return this.imie.compareTo(o.imie);
     }
 }
