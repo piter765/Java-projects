@@ -254,4 +254,55 @@ public class EmployeeController {
         alert.setContentText(errorMessage);
         alert.showAndWait();
     }
+
+    @FXML
+    protected void onModifyEmployeeButtonClick(ActionEvent event) {
+        Employee selectedEmployee = employeeTable.getSelectionModel().getSelectedItem();
+
+        if (selectedEmployee != null) {
+            // Get data from input fields
+            String nameText = nameInput.getText();
+            String lastNameText = lastNameInput.getText();
+            String birthYearText = birthYearInput.getText();
+            String conditionText = employeeConditionInput.getText();
+            String salaryText = salaryInput.getText();
+
+            if (nameText.isEmpty() && lastNameText.isEmpty() && birthYearText.isEmpty() && conditionText.isEmpty() && salaryText.isEmpty()) {
+                showErrorPopup("Provide at least one field");
+                return;
+            }
+
+            // Update the selected row with modified data
+            if (!nameText.isEmpty()) {
+                String name = nameText;
+                selectedEmployee.setImie(name);
+            }
+            if (!lastNameText.isEmpty()) {
+                String lastName = lastNameText;
+                selectedEmployee.setNazwisko(lastName);
+            }
+            if (!birthYearText.isEmpty()) {
+                int birthYear = parseInt(birthYearText);
+                selectedEmployee.setRokUrodzenia(birthYear);
+            }
+            if (!conditionText.isEmpty()) {
+                EmployeeCondition condition = EmployeeCondition.valueOf(conditionText);
+                selectedEmployee.setCondition(condition);
+            }
+            if (!salaryText.isEmpty()) {
+                double salary = Double.parseDouble(salaryText);
+                selectedEmployee.setWynagrodzenie(salary);
+            }
+
+            employeeTable.refresh();
+
+            nameInput.clear();
+            lastNameInput.clear();
+            birthYearInput.clear();
+            employeeConditionInput.clear();
+            salaryInput.clear();
+        } else {
+            showErrorPopup("Please select a row to modify.");
+        }
+    }
 }

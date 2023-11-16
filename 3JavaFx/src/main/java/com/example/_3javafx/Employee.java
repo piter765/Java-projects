@@ -41,6 +41,12 @@ public class Employee implements Comparable<Employee>{
 
     public int getRokUrodzenia() {return this.rokUrodzenia;}
 
+    public void setImie(String x) {imie = x;}
+    public void setNazwisko(String x) {nazwisko = x;}
+    public void setRokUrodzenia(int x) {rokUrodzenia = x;}
+    public void setWynagrodzenie(double x) {wynagrodzenie = x;}
+
+
     @Override
     public String toString() {
         return "{name='" + imie + "', lastName='" + nazwisko + "', condition='" + condition + "', salary=" + wynagrodzenie + "}";

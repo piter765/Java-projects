@@ -15,7 +15,7 @@
     </padding>
 
     <Label fx:id="welcomeText" alignment="CENTER" contentDisplay="CENTER" prefHeight="18.0" prefWidth="116.0" text="employees" />
-    <TableView fx:id="employeeTable" prefHeight="281.0" prefWidth="852.0">
+    <TableView fx:id="employeeTable" editable="true" prefHeight="281.0" prefWidth="852.0">
         <columns>
             <TableColumn fx:id="nameColumn" prefWidth="75.0" text="name" />
             <TableColumn fx:id="lastNameColumn" prefWidth="75.0" text="lastName" />
@@ -41,11 +41,12 @@
                <Insets />
             </HBox.margin>
          </Button>
+         <Button mnemonicParsing="false" prefHeight="26.0" prefWidth="110.0" text="modify employee" onAction="#onModifyEmployeeButtonClick"/>
         </children>
     </HBox>
     <VBox alignment="CENTER" prefHeight="302.0" prefWidth="855.0" spacing="20.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
         <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="18.0" prefWidth="134.0" text="employee groups" />
-        <TableView fx:id="classEmployeeTable" prefHeight="296.0" prefWidth="884.0">
+        <TableView fx:id="classEmployeeTable" editable="true" prefHeight="296.0" prefWidth="884.0">
             <columns>
                 <TableColumn fx:id="groupNameColumn" prefWidth="75.0" text="groupName" />
                 <TableColumn fx:id="employeeListColumn" prefWidth="75.0" text="employeeList" />
