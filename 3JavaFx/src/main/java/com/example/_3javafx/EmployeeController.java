@@ -13,6 +13,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 import static java.lang.Integer.parseInt;
 
@@ -33,6 +34,8 @@ public class EmployeeController {
     @FXML
     private TableColumn<Employee, Void> deleteColumn;
 
+    private ObservableList<Employee> originalEmployeeData;
+
     //employee inputs
     @FXML
     private TextField nameInput;
@@ -41,9 +44,12 @@ public class EmployeeController {
     @FXML
     private TextField birthYearInput;
     @FXML
-    private TextField employeeConditionInput;
+    private ComboBox<String> employeeConditionInput;
     @FXML
     private TextField salaryInput;
+
+    @FXML
+    private TextField textFilter;
 
     //classEmployee Table
     @FXML
@@ -72,10 +78,10 @@ public class EmployeeController {
         String nameText = nameInput.getText();
         String lastNameText = lastNameInput.getText();
         String birthYearText = birthYearInput.getText();
-        String conditionText = employeeConditionInput.getText();
+        String conditionText = employeeConditionInput.getValue();
         String salaryText = salaryInput.getText();
 
-        if (nameText.isEmpty() || lastNameText.isEmpty() || birthYearText.isEmpty() || conditionText.isEmpty() || salaryText.isEmpty()) {
+        if (nameText.isEmpty() || lastNameText.isEmpty() || birthYearText.isEmpty() || conditionText == null || salaryText.isEmpty()) {
             showErrorPopup("Provide all the fields");
             return;
         }
@@ -95,7 +101,7 @@ public class EmployeeController {
         nameInput.clear();
         lastNameInput.clear();
         birthYearInput.clear();
-        employeeConditionInput.clear();
+        employeeConditionInput.setValue(null);
         salaryInput.clear();
 
     }
@@ -162,10 +168,14 @@ public class EmployeeController {
             return new SimpleDoubleProperty(bd.doubleValue()).asObject();
         });
 
-
         employeeTable.getItems().add(new Employee("Piotr", "Tymula", EmployeeCondition.OBECNY, 2002, 10000));
         employeeTable.getItems().add(new Employee("Szymon", "A", EmployeeCondition.NIEOBECNY, 2003, 700));
         employeeTable.getItems().add(new Employee("Pawel", "B", EmployeeCondition.OBECNY, 2004, 5000));
+
+        //FILTER
+        originalEmployeeData = FXCollections.observableArrayList(employeeTable.getItems());
+        textFilter.setOnAction(this::applyFilter);
+
 
         deleteColumn.setCellFactory(param -> new TableCell<>() {
             private final Button deleteButton = new Button("Delete");
@@ -264,10 +274,10 @@ public class EmployeeController {
             String nameText = nameInput.getText();
             String lastNameText = lastNameInput.getText();
             String birthYearText = birthYearInput.getText();
-            String conditionText = employeeConditionInput.getText();
+            String conditionText = employeeConditionInput.getValue();
             String salaryText = salaryInput.getText();
 
-            if (nameText.isEmpty() && lastNameText.isEmpty() && birthYearText.isEmpty() && conditionText.isEmpty() && salaryText.isEmpty()) {
+            if (nameText.isEmpty() && lastNameText.isEmpty() && birthYearText.isEmpty() && conditionText == null && salaryText.isEmpty()) {
                 showErrorPopup("Provide at least one field");
                 return;
             }
@@ -299,10 +309,27 @@ public class EmployeeController {
             nameInput.clear();
             lastNameInput.clear();
             birthYearInput.clear();
-            employeeConditionInput.clear();
+            employeeConditionInput.setValue(null);
             salaryInput.clear();
         } else {
             showErrorPopup("Please select a row to modify.");
         }
+    }
+
+    @FXML
+    protected void applyFilter(ActionEvent event) {
+        String filterText = textFilter.getText().trim();
+
+        if (filterText.isEmpty()) {
+            employeeTable.setItems(originalEmployeeData);
+        } else {
+            Predicate<Employee> lastNameFilter = employee -> employee.getNazwisko().startsWith(filterText);
+            employeeTable.setItems(filterData(originalEmployeeData, lastNameFilter));
+        }
+        employeeTable.refresh();
+    }
+
+    private <T> ObservableList<T> filterData(ObservableList<T> data, Predicate<T> predicate) {
+        return data.filtered(predicate);
     }
 }
