@@ -1,0 +1,107 @@
+# IntelliJ IDEA
+.idea/
+
+# Compiled bytecode
+*.class
+
+# Log files
+*.log
+
+# User-specific files
+.idea/workspace.xml
+.idea/tasks.xml
+.idea/dictionaries
+
+# Sensitive or private configuration files
+.idea/dataSources.xml
+.idea/dataSources.ids
+.idea/sqlDataSources.xml
+.idea/dynamic.xml
+.idea/uiDesigner.xml
+
+# Global project files
+*.iml
+.idea/misc.xml
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Maven
+target/
+*.iml
+.idea_modules/
+.idea/libraries/
+
+# Gradle
+build/
+.gradle/
+
+# Eclipse
+.settings/
+.classpath
+.project
+
+# External dependencies
+.idea/libraries/
+*.jar
+
+# Package Files
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# Local configuration file (if you have it, some people don't use it)
+gradle.properties
+
+# Node.js
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# JetBrains Rider
+.idea/
+
+# User-specific files
+*.suo
+*.user
+*.userosscache
+*.suo
+*.sln.docstates
+
+# Mono Auto Generated Files
+mono_crash.*
+
+# Windows image file caches
+Thumbs.db
+ehthumbs.db
+
+# Folder config file
+Desktop.ini
+
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
+
+# VS Code directories
+.vscode/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Thumbnails
+._*
+
+# Files that might appear on external disk
+.Spotlight-V100
+.Trashes
+
+# Directories potentially created on remote AFP share
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
