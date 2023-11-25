@@ -10,6 +10,10 @@ public class Employee implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @ManyToMany
+    @JoinColumn(name = "classEmployee_id", referencedColumnName = "id")
+    private ClassEmployee classEmployee;
+
     @Column(name="firstName", nullable = false)
     private String firstName;
 
@@ -24,6 +28,7 @@ public class Employee implements Serializable {
 
     @Column(name="salary", nullable = false)
     private float salary;
+
 
     public Employee() {}
 
@@ -45,6 +50,14 @@ public class Employee implements Serializable {
     }
 
     public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getClassEmployee() {
+        return classEmployee;
+    }
+
+    public void setClassEmployee(int id) {
         this.id = id;
     }
 
