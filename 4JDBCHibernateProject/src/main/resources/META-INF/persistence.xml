@@ -5,7 +5,8 @@
              version="2.1">
 
     <persistence-unit name="myPersistenceUnit" transaction-type="RESOURCE_LOCAL">
-        <class>Employee</class>
+        <class>models.Employee</class>
+        <class>models.ClassEmployee</class>
 
         <properties>
             <!-- JDBC Database connection settings -->
@@ -22,7 +23,7 @@
             <property name="hibernate.c3p0.idle_test_period" value="3000"/>
 
             <!-- Specify dialect -->
-            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL8Dialect"/>
 
             <!-- Echo all executed SQL to stdout -->
             <property name="hibernate.show_sql" value="true"/>

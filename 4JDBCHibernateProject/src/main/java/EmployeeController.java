@@ -1,25 +1,16 @@
+import models.ClassEmployee;
+import models.Employee;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class EmployeeController {
 
-    private static EntityManagerFactory ENTITY_MANAGER_FACTORY = Persistence.createEntityManagerFactory("myPersistenceUnit");
+    private static EntityManagerFactory ENTITY_MANAGER_FACTORY = HibernateUtil.getEntityManagerFactory();
 
-    public static void main(String[] args) {
-
-        Employee employee = new Employee("Piotr", "Tymula", "CHORY", 12, 1000);
-        createEmployee(employee);
-        getEmployee(1);
-        System.out.println("All employees");
-        getEmployees();
-        deleteEmployee(1);
-        updateEmployee(3, "X", "Y");
-        getEmployees();
-
+    public static void closeEntityManagerFactory() {
         ENTITY_MANAGER_FACTORY.close();
-
-
     }
 
     public static void createEmployee(Employee employee) {

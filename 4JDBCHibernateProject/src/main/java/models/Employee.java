@@ -1,5 +1,13 @@
+package models;
+
+import models.ClassEmployee;
+
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name ="employees")
@@ -10,8 +18,8 @@ public class Employee implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @ManyToMany
-    @JoinColumn(name = "classEmployee_id", referencedColumnName = "id")
+    @ManyToOne
+    @JoinColumn(name = "classEmployeeId")
     private ClassEmployee classEmployee;
 
     @Column(name="firstName", nullable = false)
@@ -38,6 +46,7 @@ public class Employee implements Serializable {
         this.employeeCondition = employeeCondition;
         this.birthYear = birthYear;
         this.salary = salary;
+        this.classEmployee = null;
     }
 
     public Employee(String firstName, String lastName) {
@@ -53,12 +62,12 @@ public class Employee implements Serializable {
         this.id = id;
     }
 
-    public int getClassEmployee() {
-        return classEmployee;
+    public ClassEmployee getClassEmployee() {
+        return this.classEmployee;
     }
 
-    public void setClassEmployee(int id) {
-        this.id = id;
+    public void setClass(ClassEmployee classEmployee) {
+        this.classEmployee = classEmployee;
     }
 
     public String getFirstName() {
@@ -103,7 +112,7 @@ public class Employee implements Serializable {
 
     @Override
     public String toString() {
-        return "Employee{" +
+        return "models.Employee{" +
                 "id=" + id +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +

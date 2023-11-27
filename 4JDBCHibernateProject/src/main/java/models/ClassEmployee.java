@@ -1,9 +1,13 @@
+package models;
+
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
-@Table(name ="classEmployees")
+@Table(name ="class_employees")
 public class ClassEmployee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -12,8 +16,8 @@ public class ClassEmployee {
     @Column(name = "groupName", nullable = false)
     private String groupName;
 
-    @ManyToMany(mappedBy = "classEmployee", cascade = CascadeType.ALL)
-    private List<Employee> employeeList = new ArrayList<>();
+    @OneToMany(mappedBy = "classEmployee", cascade = CascadeType.ALL)
+    private Set<Employee> employees = new HashSet<>();
 
     @Column(name = "maxEmployeeListSize", nullable = false)
     private int maxEmployeeListSize;
@@ -43,12 +47,12 @@ public class ClassEmployee {
         this.groupName = groupName;
     }
 
-    public List<Employee> getEmployeeList() {
-        return employeeList;
+    public Set<Employee> getEmployees() {
+        return employees;
     }
 
-    public void setEmployeeList(List<Employee> employeeList) {
-        this.employeeList = employeeList;
+    public void setEmployees(Set<Employee> employees) {
+        this.employees = employees;
     }
 
     public int getMaxEmployeeListSize() {
@@ -58,4 +62,6 @@ public class ClassEmployee {
     public void setMaxEmployeeListSize(int maxEmployeeListSize) {
         this.maxEmployeeListSize = maxEmployeeListSize;
     }
+
+
 }
