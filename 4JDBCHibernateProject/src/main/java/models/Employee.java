@@ -29,7 +29,8 @@ public class Employee implements Serializable {
     private String lastName;
 
     @Column(name="employeeCondition", nullable = false)
-    private String employeeCondition;
+    @Enumerated(EnumType.STRING)
+    private EmployeeCondition employeeCondition;
 
     @Column(name="birthYear", nullable = false)
     private int birthYear;
@@ -40,7 +41,7 @@ public class Employee implements Serializable {
 
     public Employee() {}
 
-    public Employee(String firstName, String lastName, String employeeCondition, int birthYear, float salary) {
+    public Employee(String firstName, String lastName, EmployeeCondition employeeCondition, int birthYear, float salary) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.employeeCondition = employeeCondition;
@@ -86,11 +87,11 @@ public class Employee implements Serializable {
         this.lastName = lastName;
     }
 
-    public String getEmployeeCondition() {
+    public EmployeeCondition getEmployeeCondition() {
         return employeeCondition;
     }
 
-    public void setEmployeeCondition(String employeeCondition) {
+    public void setEmployeeCondition(EmployeeCondition employeeCondition) {
         this.employeeCondition = employeeCondition;
     }
 

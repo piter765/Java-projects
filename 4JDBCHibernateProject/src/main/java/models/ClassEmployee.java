@@ -19,6 +19,9 @@ public class ClassEmployee {
     @OneToMany(mappedBy = "classEmployee", cascade = CascadeType.ALL)
     private Set<Employee> employees = new HashSet<>();
 
+    @OneToMany(mappedBy = "classEmployee", cascade = CascadeType.ALL)
+    private List<Employee> rates = new ArrayList<>();
+
     @Column(name = "maxEmployeeListSize", nullable = false)
     private int maxEmployeeListSize;
 
@@ -61,6 +64,10 @@ public class ClassEmployee {
 
     public void setMaxEmployeeListSize(int maxEmployeeListSize) {
         this.maxEmployeeListSize = maxEmployeeListSize;
+    }
+
+    public double calculateOccupancyRate() {
+        return employees.size() / maxEmployeeListSize * 100;
     }
 
 

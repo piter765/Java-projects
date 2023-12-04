@@ -1,11 +1,15 @@
 import models.ClassEmployee;
 import models.Employee;
+import models.Rate;
 
-import javax.persistence.*;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
+import javax.persistence.TypedQuery;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EmployeeController {
+public class RateController {
 
     private static EntityManagerFactory ENTITY_MANAGER_FACTORY = HibernateUtil.getEntityManagerFactory();
 
@@ -13,7 +17,7 @@ public class EmployeeController {
         ENTITY_MANAGER_FACTORY.close();
     }
 
-    public static void createEmployee(Employee employee) {
+    public static void createRate(Rate rate) {
         EntityTransaction transaction = null;
         EntityManager entityManager = ENTITY_MANAGER_FACTORY.createEntityManager();
 
@@ -21,155 +25,116 @@ public class EmployeeController {
             transaction = entityManager.getTransaction();
             transaction.begin();
 
-            entityManager.persist(employee);
-
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction != null && transaction.isActive()) {
-                transaction.rollback();
-            }
-            e.printStackTrace();
-        } finally {
-            if (entityManager != null) {
-                entityManager.close();
-            }
-        }
-    }
-
-    public static void getEmployee(int id) {
-        EntityTransaction transaction = null;
-        EntityManager entityManager = ENTITY_MANAGER_FACTORY.createEntityManager();
-
-            String query = "SELECT e FROM Employee e WHERE e.id = :employeeId";
-
-            TypedQuery<Employee> emp = entityManager.createQuery(query, Employee.class);
-            emp.setParameter("employeeId", id);
-            Employee employee = null;
-        try {
-            employee = emp.getSingleResult();
-            System.out.println(employee.getFirstName());
-
-        } catch (Exception e) {
-            if (transaction != null && transaction.isActive()) {
-                transaction.rollback();
-            }
-            e.printStackTrace();
-        } finally {
-            if (entityManager != null) {
-                entityManager.close();
-            }
-        }
-    }
-
-    public static void getEmployees() {
-        EntityTransaction transaction = null;
-        EntityManager entityManager = ENTITY_MANAGER_FACTORY.createEntityManager();
-
-        String query = "SELECT e FROM Employee e";
-        TypedQuery<Employee> emp = entityManager.createQuery(query, Employee.class);
-
-        List<Employee> employees = new ArrayList<Employee>();
-
-        try {
-            employees = emp.getResultList();
-            for(Employee e : employees) {
-                System.out.println(e.getId() + " " + e.getFirstName());
-            }
-
-        } catch (Exception e) {
-            if (transaction != null && transaction.isActive()) {
-                transaction.rollback();
-            }
-            e.printStackTrace();
-        } finally {
-            if (entityManager != null) {
-                entityManager.close();
-            }
-        }
-    }
-
-    public static void updateEmployee(int id, String firstName, String lastName) {
-        EntityTransaction transaction = null;
-        EntityManager entityManager = ENTITY_MANAGER_FACTORY.createEntityManager();
-        Employee employee = null;
-
-        try {
-            transaction = entityManager.getTransaction();
-            transaction.begin();
-            employee = entityManager.find(Employee.class, id);
-            employee.setFirstName(firstName);
-            employee.setLastName(lastName);
-
-            entityManager.persist(employee);
-
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction != null && transaction.isActive()) {
-                transaction.rollback();
-            }
-            e.printStackTrace();
-        } finally {
-            if (entityManager != null) {
-                entityManager.close();
-            }
-        }
-    }
-
-    public static void deleteEmployee(int id) {
-        EntityTransaction transaction = null;
-        EntityManager entityManager = ENTITY_MANAGER_FACTORY.createEntityManager();
-        Employee employee = null;
-
-        try {
-            transaction = entityManager.getTransaction();
-            transaction.begin();
-            employee = entityManager.find(Employee.class, id);
-
-            entityManager.remove(employee);
-            System.out.println("Employee deleted with id: " + id);
-
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction != null && transaction.isActive()) {
-                transaction.rollback();
-            }
-            e.printStackTrace();
-        } finally {
-            if (entityManager != null) {
-                entityManager.close();
-            }
-        }
-    }
-
-    public static void search(String lastName) {
-        EntityTransaction transaction = null;
-        EntityManager entityManager = ENTITY_MANAGER_FACTORY.createEntityManager();
-
-        String queryStr = "SELECT e FROM Employee e WHERE e.lastName LIKE :lastName";
-        TypedQuery<Employee> emp = entityManager.createQuery(queryStr, Employee.class);
-        emp.setParameter("lastName", "%" + lastName + "%");
-
-        List<Employee> employees = new ArrayList<Employee>();
-
-        try {
-            transaction = entityManager.getTransaction();
-            transaction.begin();
-
-            employees = emp.getResultList();
-
-            int i = 0;
-
-            if (employees.size() == 0) {
-                System.out.println("Employee not found with filter applied.");
+            if (rate.getClassEmployee() != null && rate.getClassEmployee().getId() != 0) {
+                rate.setClassEmployee(entityManager.find(ClassEmployee.class, rate.getClassEmployee().getId()));
             } else {
-                for (Employee e : employees) {
-                    i++;
-                    System.out.println(i +" search: "  + e.getLastName());
-                }
+                entityManager.persist(rate.getClassEmployee());
             }
 
             transaction.commit();
-        } catch(Exception e) {
+        } catch (Exception e) {
+            if (transaction != null && transaction.isActive()) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            if (entityManager != null) {
+                entityManager.close();
+            }
+        }
+    }
+
+    public static void getRate(int id) {
+        EntityTransaction transaction = null;
+        EntityManager entityManager = ENTITY_MANAGER_FACTORY.createEntityManager();
+
+        String query = "SELECT r FROM Rate r WHERE r.id = :rateId";
+
+        TypedQuery<Rate> rateQuery = entityManager.createQuery(query, Rate.class);
+        rateQuery.setParameter("rateId", id);
+        Rate rate = null;
+        try {
+            rate = rateQuery.getSingleResult();
+            System.out.println("Rate value: " + rate.getValue());
+        } catch (Exception e) {
+            if (transaction != null && transaction.isActive()) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            if (entityManager != null) {
+                entityManager.close();
+            }
+        }
+    }
+
+    public static void getRates() {
+        EntityTransaction transaction = null;
+        EntityManager entityManager = ENTITY_MANAGER_FACTORY.createEntityManager();
+
+        String query = "SELECT r FROM Rate r";
+        TypedQuery<Rate> rateQuery = entityManager.createQuery(query, Rate.class);
+
+        List<Rate> rates = new ArrayList<>();
+
+        try {
+            rates = rateQuery.getResultList();
+            for (Rate r : rates) {
+                System.out.println("Rate ID: " + r.getId() + ", Value: " + r.getValue());
+            }
+        } catch (Exception e) {
+            if (transaction != null && transaction.isActive()) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            if (entityManager != null) {
+                entityManager.close();
+            }
+        }
+    }
+
+    public static void updateRate(int id, int value, String comment) {
+        EntityTransaction transaction = null;
+        EntityManager entityManager = ENTITY_MANAGER_FACTORY.createEntityManager();
+        Rate rate = null;
+
+        try {
+            transaction = entityManager.getTransaction();
+            transaction.begin();
+            rate = entityManager.find(Rate.class, id);
+            rate.setValue(value);
+            rate.setComment(comment);
+
+            entityManager.persist(rate);
+
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null && transaction.isActive()) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            if (entityManager != null) {
+                entityManager.close();
+            }
+        }
+    }
+
+    public static void deleteRate(int id) {
+        EntityTransaction transaction = null;
+        EntityManager entityManager = ENTITY_MANAGER_FACTORY.createEntityManager();
+        Rate rate = null;
+
+        try {
+            transaction = entityManager.getTransaction();
+            transaction.begin();
+            rate = entityManager.find(Rate.class, id);
+
+            entityManager.remove(rate);
+
+            transaction.commit();
+        } catch (Exception e) {
             if (transaction != null && transaction.isActive()) {
                 transaction.rollback();
             }
