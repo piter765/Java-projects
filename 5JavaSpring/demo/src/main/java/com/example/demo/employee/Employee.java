@@ -111,7 +111,7 @@ public class Employee implements Serializable {
 
     @Override
     public String toString() {
-        return "models.Employee{" +
+        return "Employee {" +
                 "id=" + id +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +

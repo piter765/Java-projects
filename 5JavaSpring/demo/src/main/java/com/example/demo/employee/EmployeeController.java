@@ -1,5 +1,6 @@
 package com.example.demo.employee;
 
+import com.example.demo.EmployeeCondition;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,4 +27,15 @@ public class EmployeeController {
         employeeService.createEmployee(employee);
     }
 
+    @DeleteMapping (path="{employeeId}")
+    public void deleteEmployee(@PathVariable("employeeId") Integer id) {
+        employeeService.deleteEmployee(id);
+    }
+
+    @PatchMapping (path="{employeeId}")
+    public void updateEmployee(@PathVariable("employeeId") Integer employeeId,
+                               @RequestBody(required = true) EmployeeUpdateRequest request) {
+        employeeService.updateEmployee(employeeId, request);
+
+    }
 }
