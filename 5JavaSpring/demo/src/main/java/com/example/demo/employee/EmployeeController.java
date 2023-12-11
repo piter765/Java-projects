@@ -1,13 +1,12 @@
 package com.example.demo.employee;
 
-import com.example.demo.EmployeeCondition;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping(path="api/v1/employees")
+@RequestMapping(path="/api/employee")
 public class EmployeeController {
 
     private final EmployeeService employeeService;
@@ -34,7 +33,7 @@ public class EmployeeController {
 
     @PatchMapping (path="{employeeId}")
     public void updateEmployee(@PathVariable("employeeId") Integer employeeId,
-                               @RequestBody(required = true) EmployeeUpdateRequest request) {
+                               @RequestBody(required = true) EmployeeDTO request) {
         employeeService.updateEmployee(employeeId, request);
 
     }
