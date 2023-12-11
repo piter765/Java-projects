@@ -1,4 +1,4 @@
-package com.example.demo.Rate;
+package com.example.demo.Rating;
 
 import com.example.demo.classEmployee.ClassEmployee;
 
@@ -6,8 +6,8 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name="rates")
-public class Rate {
+@Table(name="ratings")
+public class Rating {
 
 
     @Id
@@ -33,9 +33,9 @@ public class Rate {
         createdAt = new Date();
     }
 
-    public Rate() {}
+    public Rating() {}
 
-    public Rate(int value, ClassEmployee classEmployee, String comment) {
+    public Rating(int value, ClassEmployee classEmployee, String comment) {
         this.value = value;
         this.classEmployee = classEmployee;
         this.comment = comment;

@@ -1,5 +1,6 @@
 package com.example.demo.classEmployee;
 
+import com.example.demo.Rating.Rating;
 import com.example.demo.employee.Employee;
 import javax.persistence.*;
 
@@ -22,7 +23,7 @@ public class ClassEmployee {
     private Set<Employee> employees = new HashSet<>();
 
     @OneToMany(mappedBy = "classEmployee", cascade = CascadeType.ALL)
-    private List<Employee> rates = new ArrayList<>();
+    private List<Rating> ratings = new ArrayList<>();
 
     @Column(name = "maxEmployeeListSize", nullable = false)
     private int maxEmployeeListSize;
@@ -36,14 +37,6 @@ public class ClassEmployee {
     }
 
     // Getters and setters
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public String getGroupName() {
         return groupName;

@@ -1,13 +1,15 @@
 package com.example.demo.classEmployee;
 
+import com.example.demo.employee.Employee;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
-@Component
+@Service
 public class ClassEmployeeService {
 
     private final ClassEmployeeRepository classEmployeeRepository;
@@ -57,4 +59,10 @@ public class ClassEmployeeService {
         }
     }
 
+    public Set<Employee> getEmployeesFromClassEmployee(Integer classEmployeeId) {
+        ClassEmployee classEmployee = classEmployeeRepository.findById(classEmployeeId)
+                .orElseThrow(() -> new IllegalStateException("Group with id " + classEmployeeId + " does not exist"));
+
+        return classEmployee.getEmployees();
+    }
 }

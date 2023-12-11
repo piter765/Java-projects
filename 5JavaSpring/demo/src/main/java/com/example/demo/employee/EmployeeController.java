@@ -33,8 +33,13 @@ public class EmployeeController {
 
     @PatchMapping (path="{employeeId}")
     public void updateEmployee(@PathVariable("employeeId") Integer employeeId,
-                               @RequestBody(required = true) EmployeeDTO request) {
+                               @RequestBody EmployeeDTO request) {
         employeeService.updateEmployee(employeeId, request);
+    }
 
+    @PatchMapping(path="/{employeeId}/group/{groupId}")
+    public void addEmployeeToClassEmployee(@PathVariable("employeeId") Integer employeeId,
+                                           @PathVariable("groupId") Integer classEmployeeId) {
+        employeeService.addEmployeeToClassEmployee(employeeId, classEmployeeId);
     }
 }

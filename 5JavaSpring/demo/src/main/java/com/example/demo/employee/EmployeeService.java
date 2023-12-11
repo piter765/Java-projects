@@ -1,21 +1,27 @@
 package com.example.demo.employee;
 
 import com.example.demo.EmployeeCondition;
+import com.example.demo.classEmployee.ClassEmployee;
+import com.example.demo.classEmployee.ClassEmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Objects;
 
-@Component
+@Service
 public class EmployeeService {
 
-    public final EmployeeRepository employeeRepository;
+    private final EmployeeRepository employeeRepository;
+
+    private final ClassEmployeeRepository classEmployeeRepository;
+
 
     @Autowired
-    public EmployeeService(EmployeeRepository employeeRepository) {
+    public EmployeeService(EmployeeRepository employeeRepository, ClassEmployeeRepository classEmployeeRepository) {
         this.employeeRepository = employeeRepository;
+        this.classEmployeeRepository = classEmployeeRepository;
     }
 
     public List<Employee> getEmployees() {
@@ -73,6 +79,22 @@ public class EmployeeService {
                 !Objects.equals(employee.getSalary(), newSalary)) {
             employee.setSalary(newSalary);
         }
+
+    }
+
+    @Transactional
+    public void addEmployeeToClassEmployee(Integer employeeId, Integer classEmployeeId) {
+        Employee employee = employeeRepository.findById(employeeId)
+                .orElseThrow(() -> new IllegalStateException("Employee with id " + employeeId + " does not exist"));
+
+        ClassEmployee classEmployee = classEmployeeRepository.findById(classEmployeeId)
+                .orElseThrow(() -> new IllegalStateException("ClassEmployee with id " + classEmployeeId + " does not exist"));
+
+        if (classEmployeeRepository.findClassEmployeeByEmployeeId(employeeId).isPresent()) {
+            throw new IllegalStateException("Employee with id " + employeeId + " already exists in this group.");
+        }
+
+        employee.setClassEmployee(classEmployee);
 
     }
 }

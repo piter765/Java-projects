@@ -1,9 +1,11 @@
 package com.example.demo.classEmployee;
 
+import com.example.demo.employee.Employee;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping(path="/api/group")
@@ -21,6 +23,11 @@ public class ClassEmployeeController {
         return classEmployeeService.getClassEmployees();
     }
 
+    @GetMapping(path="/{groupId}/employee")
+    public Set<Employee> getEmployeesFromClassEmployee(@PathVariable("groupId") Integer groupId) {
+        return classEmployeeService.getEmployeesFromClassEmployee(groupId);
+    }
+
     @PostMapping
     public void createClassEmployee(@RequestBody ClassEmployee classEmployee) {
         classEmployeeService.createClassEmployee(classEmployee);
@@ -36,6 +43,6 @@ public class ClassEmployeeController {
                                @RequestBody(required = false) ClassEmployee classEmployee
                                     ) {
         classEmployeeService.updateClassEmployee(classEmployeeId, classEmployee);
-
     }
+
 }

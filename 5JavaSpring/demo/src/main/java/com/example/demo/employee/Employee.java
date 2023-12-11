@@ -65,6 +65,10 @@ public class Employee implements Serializable {
         return this.classEmployee;
     }
 
+    public void setClassEmployee(ClassEmployee classEmployee) {
+        this.classEmployee = classEmployee;
+    }
+
     public void setClass(ClassEmployee classEmployee) {
         this.classEmployee = classEmployee;
     }
