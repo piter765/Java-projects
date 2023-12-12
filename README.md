@@ -13,5 +13,11 @@ There is also simple error handling.
 ![image](https://github.com/piter765/Java-projects/assets/85838183/4a60dd0c-73b2-4f9f-97c8-ec94830c5b6f)
 ![image](https://github.com/piter765/Java-projects/assets/85838183/93e8ac74-5d34-4ff0-9559-c55b11ed157f)
 
+# 4JDBCHibernateProject
+Application with hibernate and JDBC.
+
+# 5Spring-project
+REST application with Spring. Includes employee, group, rating endpoints, testing, orm. 
+
 
 
