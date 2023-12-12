@@ -13,8 +13,14 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Optional;
+
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
@@ -42,7 +48,6 @@ class EmployeeServiceTest {
     }
 
     @Test
-
     void canCreateEmployee() {
         //given
         Employee employee = new Employee("Piotr", "Tymula", EmployeeCondition.CHORY, 2000, 1000);
@@ -59,14 +64,51 @@ class EmployeeServiceTest {
         Employee capturedEmployee = employeeArgumentCaptor.getValue();
         //compare employees
         assertThat(capturedEmployee).isEqualTo(employee);
+    }
 
+    @Test
+    void willThrowWhenFirstNameAndLastNameIsTaken() {
+        //given
+        Employee employee = new Employee("Piotr", "Tymula", EmployeeCondition.CHORY, 2000, 1000);
+
+        given(employeeRepository.findEmployeeByFirstNameAndLastName(employee.getFirstName(), employee.getLastName()))
+                .willReturn(Optional.of(employee));
+        //when
+        //then
+        assertThatThrownBy(() -> underTest.createEmployee(employee))
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("Employee with firstName: " + employee.getFirstName()
+                        + " and lastName: " + employee.getLastName()
+                        +  " already exists");
+
+        verify(employeeRepository, never()).save(any());
 
     }
 
     @Test
-    @Disabled
-    void deleteEmployee() {
+    void canDeleteEmployee() {
+        int id = 1;
+        given(employeeRepository.existsById(id))
+                .willReturn(true);
+
+        underTest.deleteEmployee(id);
+
+        verify(employeeRepository).deleteById(id);
     }
+
+    @Test
+    void willThrowWhenEmployeeIsNotInDatabaseWhenDeleting() {
+        int id = 1;
+        given(employeeRepository.existsById(id))
+                .willReturn(false);
+
+        assertThatThrownBy(() -> underTest.deleteEmployee(id))
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("employee with id " + id + "does not exist");
+
+        verify(employeeRepository, never()).deleteById(id);
+    }
+
 
     @Test
     @Disabled

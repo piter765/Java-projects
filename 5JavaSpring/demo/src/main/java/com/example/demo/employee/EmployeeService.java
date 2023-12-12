@@ -29,6 +29,16 @@ public class EmployeeService {
     }
 
     public void createEmployee(Employee employee) {
+        boolean existsEmployee = employeeRepository
+                .findEmployeeByFirstNameAndLastName(employee.getFirstName(), employee.getLastName())
+                .isPresent();
+        if (existsEmployee) {
+            throw new IllegalStateException(
+                    "Employee with firstName: " + employee.getFirstName()
+                            + " and lastName: " + employee.getLastName()
+                            +  " already exists"
+            );
+        }
         employeeRepository.save(employee);
     }
 
