@@ -5,9 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class ClassEmployeeService {
@@ -28,11 +26,10 @@ public class ClassEmployeeService {
     }
 
     public void deleteClassEmployee(Integer classEmployeeId) {
-        boolean exists = classEmployeeRepository.existsById(classEmployeeId);
+        ClassEmployee classEmployee = classEmployeeRepository.findById(classEmployeeId).orElseThrow(() ->
+                new IllegalStateException("group with id " + classEmployeeId + "does not exist"));
 
-        if (!exists) {
-           throw new IllegalStateException("group with id " + classEmployeeId + "does not exist");
-        }
+        classEmployee.getEmployees().forEach(employee -> employee.setClassEmployee(null));
 
         classEmployeeRepository.deleteById(classEmployeeId);
     }
@@ -64,5 +61,12 @@ public class ClassEmployeeService {
                 .orElseThrow(() -> new IllegalStateException("Group with id " + classEmployeeId + " does not exist"));
 
         return classEmployee.getEmployees();
+    }
+
+    public double getClassEmployeeFill(Integer classEmployeeId) {
+        ClassEmployee classEmployee = classEmployeeRepository.findById(classEmployeeId).orElseThrow(() -> new IllegalStateException(
+                "Group with id " + classEmployeeId + " does not exist"));
+
+        return classEmployee.getFill();
     }
 }

@@ -2,6 +2,7 @@ package com.example.demo.classEmployee;
 
 import com.example.demo.employee.Employee;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,9 +24,14 @@ public class ClassEmployeeController {
         return classEmployeeService.getClassEmployees();
     }
 
-    @GetMapping(path="/{groupId}/employee")
+    @GetMapping(path="{groupId}/employee")
     public Set<Employee> getEmployeesFromClassEmployee(@PathVariable("groupId") Integer groupId) {
         return classEmployeeService.getEmployeesFromClassEmployee(groupId);
+    }
+
+    @GetMapping(path="{groupId}/fill")
+    public double getClassEmployeeFill(@PathVariable Integer groupId) {
+        return classEmployeeService.getClassEmployeeFill(groupId);
     }
 
     @PostMapping

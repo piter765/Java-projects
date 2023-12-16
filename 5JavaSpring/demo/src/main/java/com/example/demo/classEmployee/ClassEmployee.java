@@ -2,6 +2,8 @@ package com.example.demo.classEmployee;
 
 import com.example.demo.Rating.Rating;
 import com.example.demo.employee.Employee;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 import java.util.ArrayList;
@@ -19,7 +21,8 @@ public class ClassEmployee {
     @Column(name = "groupName", nullable = false)
     private String groupName;
 
-    @OneToMany(mappedBy = "classEmployee", cascade = CascadeType.ALL)
+    @JsonIgnore
+    @OneToMany(mappedBy = "classEmployee")
     private Set<Employee> employees = new HashSet<>();
 
     @OneToMany(mappedBy = "classEmployee", cascade = CascadeType.ALL)
@@ -37,6 +40,8 @@ public class ClassEmployee {
     }
 
     // Getters and setters
+
+    public int getId() { return this.id; }
 
     public String getGroupName() {
         return groupName;
@@ -62,7 +67,7 @@ public class ClassEmployee {
         this.maxEmployeeListSize = maxEmployeeListSize;
     }
 
-    public double calculateOccupancyRate() {
+    public double getFill() {
         return employees.size() / maxEmployeeListSize * 100;
     }
 

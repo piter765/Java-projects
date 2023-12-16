@@ -1,6 +1,7 @@
 package com.example.demo.employee;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,6 +20,11 @@ public class EmployeeController {
     @GetMapping
     public List<Employee> getEmployees() {
         return employeeService.getEmployees();
+    }
+
+    @GetMapping(path="csv")
+    public ResponseEntity<byte[]> getEmployeesInCsv() {
+        return employeeService.getEmployeesInCsv();
     }
 
     @PostMapping
