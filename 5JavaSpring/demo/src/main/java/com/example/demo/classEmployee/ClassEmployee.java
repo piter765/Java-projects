@@ -68,6 +68,10 @@ public class ClassEmployee {
     }
 
     public double getFill() {
+        if (maxEmployeeListSize == 0) {
+            return 0.0;
+        }
+
         return employees.size() / maxEmployeeListSize * 100;
     }
 

@@ -5,6 +5,7 @@ import com.example.demo.classEmployee.ClassEmployee;
 import com.example.demo.classEmployee.ClassEmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -115,7 +116,7 @@ public class EmployeeService {
         List<Employee> employees = employeeRepository.findAll();
 
         if (employees.size() == 0) {
-            throw new IllegalStateException("There are no employees to generate list from.");
+            throw new IllegalStateException("There are no employees to generate list from");
         }
 
         String csvContent = EmployeeHelpers.generateCsvContentForEmployees(employees);
@@ -126,7 +127,7 @@ public class EmployeeService {
         headers.setContentType(MediaType.parseMediaType("text/csv"));
         headers.setContentDispositionFormData("attachment", "employees.csv");
 
-        return new ResponseEntity<>(csvBytes, headers, org.springframework.http.HttpStatus.OK);
+        return new ResponseEntity<>(csvBytes, headers, HttpStatus.OK);
 
     }
 }
