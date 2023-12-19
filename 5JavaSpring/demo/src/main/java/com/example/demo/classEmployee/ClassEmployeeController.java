@@ -2,6 +2,7 @@ package com.example.demo.classEmployee;
 
 import com.example.demo.employee.Employee;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,35 +21,73 @@ public class ClassEmployeeController {
     }
 
     @GetMapping
-    public List<ClassEmployee> getClassEmployees() {
-        return classEmployeeService.getClassEmployees();
+    public ResponseEntity<?> getClassEmployees() {
+        try {
+            List<ClassEmployee> classEmployees = classEmployeeService.getClassEmployees();
+            return ResponseEntity.ok(classEmployees);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
     }
 
-    @GetMapping(path="{groupId}/employee")
-    public Set<Employee> getEmployeesFromClassEmployee(@PathVariable("groupId") Integer groupId) {
-        return classEmployeeService.getEmployeesFromClassEmployee(groupId);
+    @GetMapping(path = "{groupId}/employee")
+    public ResponseEntity<?> getEmployeesFromClassEmployee(@PathVariable("groupId") Integer groupId) {
+        try {
+            Set<Employee> employees = classEmployeeService.getEmployeesFromClassEmployee(groupId);
+            return ResponseEntity.ok(employees);
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(404).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
     }
 
-    @GetMapping(path="{groupId}/fill")
-    public double getClassEmployeeFill(@PathVariable Integer groupId) {
-        return classEmployeeService.getClassEmployeeFill(groupId);
+    @GetMapping(path = "{groupId}/fill")
+    public ResponseEntity<?> getClassEmployeeFill(@PathVariable Integer groupId) {
+        try {
+            double fill = classEmployeeService.getClassEmployeeFill(groupId);
+            return ResponseEntity.ok(fill);
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(404).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
     }
 
     @PostMapping
-    public void createClassEmployee(@RequestBody ClassEmployee classEmployee) {
-        classEmployeeService.createClassEmployee(classEmployee);
+    public ResponseEntity<?> createClassEmployee(@RequestBody ClassEmployee classEmployee) {
+        try {
+            classEmployeeService.createClassEmployee(classEmployee);
+            return ResponseEntity.status(201).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
     }
 
-    @DeleteMapping(path="{classEmployeeId}")
-    public void deleteClassEmployee(@PathVariable("classEmployeeId") Integer id) {
-        classEmployeeService.deleteClassEmployee(id);
+    @DeleteMapping(path = "{classEmployeeId}")
+    public ResponseEntity<?> deleteClassEmployee(@PathVariable("classEmployeeId") Integer id) {
+        try {
+            classEmployeeService.deleteClassEmployee(id);
+            return ResponseEntity.noContent().build();
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(404).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
     }
 
-    @PatchMapping (path="{classEmployeeId}")
-    public void updateClassEmployee(@PathVariable("classEmployeeId") Integer classEmployeeId,
-                               @RequestBody(required = false) ClassEmployee classEmployee
-                                    ) {
-        classEmployeeService.updateClassEmployee(classEmployeeId, classEmployee);
+    @PatchMapping(path = "{classEmployeeId}")
+    public ResponseEntity<Void> updateClassEmployee(
+            @PathVariable("classEmployeeId") Integer classEmployeeId,
+            @RequestBody(required = false) ClassEmployee classEmployee) {
+        try {
+            classEmployeeService.updateClassEmployee(classEmployeeId, classEmployee);
+            return ResponseEntity.noContent().build();
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(404).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(500).build();
+        }
     }
 
 }

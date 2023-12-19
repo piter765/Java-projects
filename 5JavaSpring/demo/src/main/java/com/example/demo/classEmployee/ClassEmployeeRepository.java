@@ -19,5 +19,9 @@ public interface ClassEmployeeRepository extends JpaRepository<ClassEmployee, In
     @Query("SELECT e FROM Employee e WHERE e.classEmployee.id = :classEmployeeId")
     List<Employee> findEmployeesByClassEmployeeId(@Param("classEmployeeId") Integer classEmployeeId);
 
+    @Query("SELECT COUNT(c) > 0 FROM ClassEmployee c WHERE c.groupName = :groupName")
+    boolean existsByGroupName(@Param("groupName") String groupName);
+
+
 }
 

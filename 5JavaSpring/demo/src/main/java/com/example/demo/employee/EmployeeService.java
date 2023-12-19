@@ -40,9 +40,10 @@ public class EmployeeService {
             throw new IllegalStateException(
                     "Employee with firstName: " + employee.getFirstName()
                             + " and lastName: " + employee.getLastName()
-                            +  " already exists"
+                            + " already exists"
             );
         }
+
         employeeRepository.save(employee);
     }
 

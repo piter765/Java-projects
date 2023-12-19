@@ -22,6 +22,12 @@ public class ClassEmployeeService {
     }
 
     public void createClassEmployee(ClassEmployee classEmployee) {
+        boolean exists = classEmployeeRepository.existsByGroupName(classEmployee.getGroupName());
+
+        if (exists) {
+            throw new IllegalStateException("Group with this name already exists");
+        }
+
         classEmployeeRepository.save(classEmployee);
     }
 

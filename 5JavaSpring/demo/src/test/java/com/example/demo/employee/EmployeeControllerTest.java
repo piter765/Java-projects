@@ -4,11 +4,13 @@ import com.example.demo.EmployeeCondition;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -47,21 +49,28 @@ class EmployeeControllerTest {
     }
 
     @Test
-    @Disabled
-    void getEmployeesInCsv() throws Exception {
-        List<Employee> employees = Arrays.asList(new Employee(), new Employee());
+    void shouldGetEmployeesInCSV() throws Exception {
 
-        when(employeeService.getEmployees()).thenReturn(employees);
+        when(employeeService.getEmployeesInCsv()).thenReturn(createMockCsvResponse());
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/employee/csv")
-                        )
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().contentType("text/csv"))
-                .andExpect(MockMvcResultMatchers.header().string(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=employees.csv")) // Expect the content disposition header
-                .andExpect(MockMvcResultMatchers.content().json(new ObjectMapper().writeValueAsString(employees)))
-                .andDo(print());
+                .andExpect(MockMvcResultMatchers.header().string("Content-Type", "text/csv"))
+                .andExpect(MockMvcResultMatchers.header().string("Content-Disposition", "attachment; filename=employees.csv"))
+                .andExpect(MockMvcResultMatchers.content().string(createExpectedCsvContent()));
+    }
 
-        verify(employeeService).getEmployeesInCsv();
+    private ResponseEntity<byte[]> createMockCsvResponse() {
+        byte[] mockCsvData = "firstName,lastName,birthYear,salary,employeeCondition\nJohn,Doe,1990,5000,DELEGACJA\n".getBytes();
+        return ResponseEntity.ok()
+                .header("Content-Type", "text/csv")
+                .header("Content-Disposition", "attachment; filename=employees.csv")
+                .body(mockCsvData);
+    }
+
+    private String createExpectedCsvContent() {
+        return "firstName,lastName,birthYear,salary,employeeCondition\nJohn,Doe,1990,5000,DELEGACJA\n";
     }
 
     @Test
@@ -71,10 +80,16 @@ class EmployeeControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.post("/api/employee")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(employee)))
-                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.status().isCreated())
                 .andDo(print());
 
-        verify(employeeService).createEmployee(employee);
+        ArgumentCaptor<Employee> employeeCaptor = ArgumentCaptor.forClass(Employee.class);
+        verify(employeeService).createEmployee(employeeCaptor.capture());
+
+        Employee capturedEmployee = employeeCaptor.getValue();
+
+        assertEquals(capturedEmployee.getLastName(), employee.getLastName());
+        assertEquals(capturedEmployee.getFirstName(), employee.getFirstName());
     }
 
     @Test
@@ -83,7 +98,7 @@ class EmployeeControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/employee/{id}", employeeId)
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.status().isNoContent())
                 .andDo(print());
 
         verify(employeeService).deleteEmployee(employeeId);

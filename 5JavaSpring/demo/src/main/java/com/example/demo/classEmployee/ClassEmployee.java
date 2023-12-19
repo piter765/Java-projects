@@ -72,7 +72,7 @@ public class ClassEmployee {
             return 0.0;
         }
 
-        return employees.size() / maxEmployeeListSize * 100;
+        return (double) employees.size() / (double) maxEmployeeListSize * 100;
     }
 
 

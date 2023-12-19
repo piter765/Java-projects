@@ -94,7 +94,7 @@ class ClassEmployeeControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.post("/api/group")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(classEmployee)))
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated());
 
         ArgumentCaptor<ClassEmployee> classEmployeeArgumentCaptor = ArgumentCaptor.forClass(ClassEmployee.class);
 
@@ -107,7 +107,7 @@ class ClassEmployeeControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/group/{groupId}", groupId)
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.status().isNoContent())
                 .andDo(print());
 
         verify(classEmployeeService).deleteClassEmployee(groupId);

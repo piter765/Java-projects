@@ -3,6 +3,8 @@ package com.example.demo.Rating;
 import com.example.demo.classEmployee.ClassEmployee;
 import com.example.demo.classEmployee.ClassEmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,18 +21,34 @@ public class RatingController {
     }
 
     @GetMapping
-    public List<Rating> getRatings() {
-        return ratingService.getRatings();
+    public ResponseEntity<?> getRatings() {
+        try {
+            List<Rating> ratings = ratingService.getRatings();
+
+            return ResponseEntity.status(200).body(ratings);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
     }
 
     @PostMapping
-    public void createRating(@RequestBody Rating rating, @RequestParam("groupId") Integer classEmployeeId) {
-        ratingService.createRating(rating, classEmployeeId);
+    public ResponseEntity<?> createRating(@RequestBody Rating rating, @RequestParam("groupId") Integer classEmployeeId) {
+        try {
+            ratingService.createRating(rating, classEmployeeId);
+            return ResponseEntity.status(HttpStatus.CREATED).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
     }
 
     @DeleteMapping(path="{ratingId}")
-    public void deleteRating(@PathVariable("ratingId") Integer id) {
-        ratingService.deleteRating(id);
+    public ResponseEntity<?> deleteRating(@PathVariable("ratingId") Integer id) {
+        try {
+            ratingService.deleteRating(id);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
     }
 
 }
