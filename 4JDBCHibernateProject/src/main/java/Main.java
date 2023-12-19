@@ -9,28 +9,32 @@ public class Main {
         EmployeeController employeeController = new EmployeeController();
         ClassEmployeeController classEmployeeController = new ClassEmployeeController();
 
-        Employee employee = new Employee("Piotr", "Tymula", EmployeeCondition.CHORY, 12, 1000);
+        Employee employee = new Employee("Piotr", "Tymula", EmployeeCondition.CHORY, 15, 1000);
         employeeController.createEmployee(employee);
         System.out.println("Employee found by id: ");
         employeeController.getEmployee(1);
         System.out.println("All employees");
         employeeController.getEmployees();
 
-        employeeController.deleteEmployee(21);
+        //employeeController.deleteEmployee(21);
         System.out.println("Updated employee:");
-        employeeController.updateEmployee(20, "X", "Y");
+        employeeController.updateEmployee(31, "X", "Y");
         employeeController.getEmployee(20);
         employeeController.search("Tym");
 
-        ClassEmployee classEmployee = new ClassEmployee("class3", 100);
+        ClassEmployee classEmployee = new ClassEmployee("class5", 100);
         ClassEmployeeController.createClass(classEmployee);
 
-        ClassEmployeeController.addEmployeeToClass(19, "class3");
-        ClassEmployeeController.addEmployeeToClass(18, "class1");
-        classEmployee.calculateOccupancyRate();
-        ClassEmployeeController.removeEmployeeFromClass(19);
-
         Rate rate = new Rate(2, classEmployee, "Pretty bad." );
+
+        RateController.createRate(rate);
+
+        //ClassEmployeeController.addEmployeeToClass(31, "class1");
+        //ClassEmployeeController.addEmployeeToClass(18, "class1");
+        System.out.println(classEmployee.calculateOccupancyRate());
+        ClassEmployeeController.removeEmployeeFromClass(31);
+
+        //Rate rate = new Rate(2, classEmployee, "Pretty bad." );
 
         RateController.createRate(rate);
         //RateController.deleteRate(3);
